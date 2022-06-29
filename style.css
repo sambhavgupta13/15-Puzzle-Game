@@ -1,0 +1,31 @@
+#boardCover{
+    height: 300px;
+    width: 300px;
+    position: fixed;
+    
+    background-color: green   ;
+    opacity: 50%;
+    color: white;
+    font-size: 500%;
+    
+    justify-content: center;
+    align-items: center;
+}
+#board{
+    height: 300px;
+    width: 300px;
+    position: fixed;
+    /* z-index: 2; */
+    
+}
+
+.board_row{
+    display: flex;
+}
+.board_row div{
+    padding: 10px;
+    border: 2px solid black;
+    height: 30px;
+    width: 30px;
+    margin: 10px;
+}

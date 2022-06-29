@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<link rel="stylesheet" href="./style.css">
+<body>
+
+
+<span id="movesCounter"></span>
+<span id="timer"></span>
+<button id="toggleActivity">Start</button>
+<button id="resetButton" onclick="handleWindowLoader({command:'Reset'})">Reset</button>
+
+
+
+    <div id="board">
+        <div class="board_row">
+            <div id="board_row_1" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_2" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_3" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_4" onclick="clickedBlock(this.id.split('_')[2])"></div>
+        </div>
+        <div class="board_row">
+            <div id="board_row_5" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_6" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_7" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_8" onclick="clickedBlock(this.id.split('_')[2])"></div>
+           
+        </div>
+        <div class="board_row">
+            <div id="board_row_9" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_10" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_11" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_12" onclick="clickedBlock(this.id.split('_')[2])"></div>
+        </div>
+        <div class="board_row">
+            <div id="board_row_13" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_14" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_15" onclick="clickedBlock(this.id.split('_')[2])"></div>
+            <div id="board_row_16" onclick="clickedBlock(this.id.split('_')[2])"></div>
+        </div>
+
+        </div>
+    <div id="boardCover">PLAY</div>
+
+
+<script  src="./script.js" ></script>
+</body>
+</html>
