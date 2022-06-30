@@ -11,42 +11,73 @@
 <body>
 
 
-<span id="movesCounter"></span>
-<span id="timer"></span>
-<button id="toggleActivity">Start</button>
-<button id="resetButton" onclick="handleWindowLoader({command:'Reset'})">Reset</button>
+
+<section id="gamePlatform">
+    <section id="gamePlatform_header">Fifteen Puzzle Game</section>
+    <section id="gamePlatform_activity">
+
+<div id="gamePlatform_activity_moves" >
+    <div>Moves</div><br>
+    <div id="movesCounter"></div>
+</div>
+<div id="gamePlatform_activity_timer" >
+<div>Time</div><br>
+<div id="timer"></div>
+</div>
+<div id="gamePlatform_activity_ToggleButtons">
+    <button id="toggleActivity">Start</button>
+    <button id="resetButton" onclick="handleWindowLoader({command:'Reset'})">Reset</button>
+</div>
+        
+       
+       
 
 
 
-    <div id="board">
-        <div class="board_row">
-            <div id="board_row_1" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_2" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_3" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_4" onclick="clickedBlock(this.id.split('_')[2])"></div>
+    </section>
+    <section id="gamePlatform_gameBoard">
+        <div id="parent">
+            <div id="board">
+                <div class="board_row">
+                    <div id="board_row_1" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_2" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_3" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_4" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                </div>
+                <div class="board_row">
+                    <div id="board_row_5" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_6" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_7" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_8" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                   
+                </div>
+                <div class="board_row">
+                    <div id="board_row_9" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_10" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_11" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_12" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                </div>
+                <div class="board_row">
+                    <div id="board_row_13" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_14" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_15" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div id="board_row_16" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                </div>
+        
+                </div>
+            <div id="boardCover">PLAY</div>
         </div>
-        <div class="board_row">
-            <div id="board_row_5" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_6" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_7" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_8" onclick="clickedBlock(this.id.split('_')[2])"></div>
-           
-        </div>
-        <div class="board_row">
-            <div id="board_row_9" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_10" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_11" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_12" onclick="clickedBlock(this.id.split('_')[2])"></div>
-        </div>
-        <div class="board_row">
-            <div id="board_row_13" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_14" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_15" onclick="clickedBlock(this.id.split('_')[2])"></div>
-            <div id="board_row_16" onclick="clickedBlock(this.id.split('_')[2])"></div>
-        </div>
+       
+    </section>
+   
+    
+<section id="gamePlatform_footer"><b>Instructions</b> : Place each block in it's correct position starting from <b>1 to 15</b> . To move a block you can <b>click</b> on it and swap it with the empty block .</section>
+</section>
 
-        </div>
-    <div id="boardCover">PLAY</div>
+
+
+
+   
 
 
 <script  src="./script.js" ></script>

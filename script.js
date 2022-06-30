@@ -374,13 +374,15 @@ async function clickedBlock(id) {
     } else {
       timeResultToBeShown = `${minutes} Minute and ${seconds} Seconds`;
     }
-
-    alert(
-      `Congratulations you solved the puzzle in ${
-        stepsCounter + 1
-      } steps in ${timeResultToBeShown}`
-    );
-    handleWindowLoader({ command: "Reset" });
+setTimeout(()=>{
+  alert(
+    `Congratulations you solved the puzzle in ${
+      stepsCounter
+    } steps in ${timeResultToBeShown}`
+  );
+  handleWindowLoader({ command: "Reset" });
+},500)
+   
   }
 }
 
@@ -408,6 +410,7 @@ document
       handleTimer({ command: "Pause" });
       document.querySelector("#boardCover").textContent = "Paused";
       document.querySelector("#toggleActivity").textContent = "Resume";
+     
     } else {
       document.querySelector("#toggleActivity").textContent = "Pause";
       document.querySelector("#boardCover").style.display = "none";
