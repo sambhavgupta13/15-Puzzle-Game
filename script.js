@@ -88,7 +88,12 @@ async function createPuzzleBoard() {
 
   stepsCounter = Number(localStorage.getItem("currentMoves"));
 
-  document.querySelector("#toggleActivity").textContent = "Start";
+  document.querySelector("#toggleActivity").value = "Start";
+  document.querySelector("#toggleActivity").title = "Start Game"
+  document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-skip-start-circle" viewBox="0 0 16 16">
+    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+    <path d="M10.229 5.055a.5.5 0 0 0-.52.038L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.271-.445z" />
+  </svg>`
   document.querySelector("#boardCover").textContent = "Play";
 
   await checkForValidity(list)
@@ -125,11 +130,14 @@ function change_background(status_map, swapperPosition) {
     if (array[i][1].status) {
       document.querySelector(
         `#board_row_${array[i][0]}`
-      ).style.backgroundColor = "red";
+      ).style.backgroundColor = "green";
     } else if (array[i][0] == swapperPosition) {
       document.querySelector(
         `#board_row_${array[i][0]}`
-      ).style.backgroundColor = "blue";
+      ).style.backgroundColor = "rgb(78, 78, 9)";
+      document.querySelector(
+        `#board_row_${array[i][0]}`
+      ).style.opacity = "70%"
     } else {
       document.querySelector(
         `#board_row_${array[i][0]}`
@@ -374,22 +382,26 @@ async function clickedBlock(id) {
     } else {
       timeResultToBeShown = `${minutes} Minute and ${seconds} Seconds`;
     }
-setTimeout(()=>{
-  alert(
-    `Congratulations you solved the puzzle in ${
-      stepsCounter
-    } steps in ${timeResultToBeShown}`
-  );
-  handleWindowLoader({ command: "Reset" });
-},500)
-   
+    setTimeout(() => {
+      alert(
+        `Congratulations you solved the puzzle in ${stepsCounter
+        } steps in ${timeResultToBeShown}`
+      );
+      handleWindowLoader({ command: "Reset" });
+    }, 500)
+
   }
 }
 
 // Handle boardCover click event
 document.querySelector("#boardCover").addEventListener("click", function () {
   document.querySelector("#boardCover").style.display = "none";
-  document.querySelector("#toggleActivity").textContent = "Pause";
+  document.querySelector("#toggleActivity").value = "Pause";
+  document.querySelector("#toggleActivity").title = "Pause Game"
+  document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+</svg>`
 
   handleTimer({ command: "Start" });
 });
@@ -398,21 +410,36 @@ document.querySelector("#boardCover").addEventListener("click", function () {
 document
   .querySelector("#toggleActivity")
   .addEventListener("click", function () {
-    if (document.querySelector("#toggleActivity").textContent == "Start") {
-      document.querySelector("#toggleActivity").textContent = "Pause";
+    if (document.querySelector("#toggleActivity").value == "Start") {
+      document.querySelector("#toggleActivity").value = "Pause";
+      document.querySelector("#toggleActivity").title = "Pause Game"
+      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+</svg>`
       document.querySelector("#boardCover").style.display = "none";
 
       handleTimer({ command: "Start" });
     } else if (
-      document.querySelector("#toggleActivity").textContent == "Pause"
+      document.querySelector("#toggleActivity").value == "Pause"
     ) {
       document.querySelector("#boardCover").style.display = "flex";
       handleTimer({ command: "Pause" });
       document.querySelector("#boardCover").textContent = "Paused";
-      document.querySelector("#toggleActivity").textContent = "Resume";
-     
+      document.querySelector("#toggleActivity").value = "Resume";
+      document.querySelector("#toggleActivity").title = "Resume Game"
+      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
+</svg>`
+
     } else {
-      document.querySelector("#toggleActivity").textContent = "Pause";
+      document.querySelector("#toggleActivity").value = "Pause";
+      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
+</svg>`
+      document.querySelector("#toggleActivity").title = "Pause Game"
       document.querySelector("#boardCover").style.display = "none";
       handleTimer({ command: "Resume" });
     }
