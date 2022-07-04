@@ -14,11 +14,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let currentTime = getCurrentTime();
   if (currentTime > 0) {
     if (currentTime > 0) {
+      document.querySelector('body').style.display = "none"
       let status = confirm("You want to resume ?");
       if (!status) {
         handleWindowLoader({ command: "Reset" });
+        document.querySelector('body').style.display = "block"
       } else {
         handleWindowLoader({ command: "Resume" });
+        document.querySelector('body').style.display = "block"
       }
     }
   } else {
