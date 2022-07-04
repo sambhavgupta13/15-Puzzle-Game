@@ -121,6 +121,7 @@ async function createPuzzleBoard() {
     });
 }
 
+
 // Change Background Colour of the blocks according to their state
 function change_background(status_map, swapperPosition) {
   let map_values = status_map.entries();
