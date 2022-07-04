@@ -136,9 +136,7 @@ function change_background(status_map, swapperPosition) {
       document.querySelector(
         `#board_row_${array[i][0]}`
       ).style.backgroundColor = "rgb(78, 78, 9)";
-      document.querySelector(
-        `#board_row_${array[i][0]}`
-      ).style.opacity = "70%"
+     
     } else {
       document.querySelector(
         `#board_row_${array[i][0]}`
