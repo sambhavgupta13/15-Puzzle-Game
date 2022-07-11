@@ -1,156 +1,225 @@
-let selector = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null]; // array from which random no.s will be selected from 1 to 15
+// array from which random no.s will be selected from 1 to 15
+const positionsArray = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  null,
+];
 
-let status_map = new Map(); //  map to keep the track of blocks and their correct positions
+const positionStatusMap = new Map(); //  map to keep the track of blocks and their correct positions
 
-// Handle Moves
-let stepsCounter = 0;
+// Audio files played while handling click events
+const toggleActivityAudio = new Audio("./assets/toggleactivity.mp3");
+const winningAudio = new Audio("./assets/winning.wav");
+const clickButtonAudio = new Audio("./assets/clickbutton.wav");
 
-function increaseStepCounter() {
-  stepsCounter++;
+// DOM elements
+const timer = document.querySelector("#timer");
+const movesCounter = document.querySelector("#movescounter");
+const gameBoardCover = document.querySelector(
+  "#Game_gameboard_container_cover"
+);
+const toggleActivity = document.querySelector("#toggleactivity");
+const resetButton = document.querySelector("#resetbutton");
+
+let stepsCounter = 0; // Variable to count moves of the players
+
+// local storage variables
+let localStorageTime = localStorage.getItem("currentTime");
+let localStorageMoves = localStorage.getItem("currentMoves");
+let localStoragePositions = localStorage.getItem("currentPositions");
+
+// Function to set Local storage values
+function setLocalStorageValues(key, value) {
+  localStorage.setItem(key, value);
+  if (key == "currentTime") {
+    localStorageTime = value;
+  } else if (key == "currentMoves") {
+    localStorageMoves = value;
+  } else if (key == "currentPositions") {
+    localStoragePositions = value;
+  }
+}
+
+// Function  which returns DOM element cell with attached position
+function GiveCellId(position) {
+  return document.querySelector(
+    `#Game_gameboard_container_board_row_cell-${position}`
+  );
 }
 
 // Document load activity
 document.addEventListener("DOMContentLoaded", (event) => {
-  let currentTime = getCurrentTime();
+  const currentTime = getCurrentTime();
+
   if (currentTime > 0) {
-    if (currentTime > 0) {
-           let status = confirm("You want to resume ?");
-      if (!status) {
-        handleWindowLoader({ command: "Reset" });
-             } else {
-        handleWindowLoader({ command: "Resume" });
-             }
+    const status = confirm("You want to resume ?");
+
+    if (!status) {
+      handleWindowLoader({ command: "RESET" });
+    } else {
+      handleWindowLoader({ command: "RESUME" });
     }
   } else {
-    handleWindowLoader({ command: "Load" });
+    handleWindowLoader({ command: "LOAD" });
   }
+
+  document.body.style.display = "block";
 });
 
 function getCurrentTime() {
   let currentTime;
-  if (localStorage.getItem("currentTime")) {
-    currentTime = localStorage.getItem("currentTime").split(":");
-    let minutes = Number(currentTime[0]) * 60;
-    let seconds = Number(currentTime[1]);
-    currentTime = minutes + seconds;
-  } else {
-    currentTime = 0;
-  }
 
-  return currentTime;
+  if (localStorageTime) {
+    currentTime = localStorageTime.split(":");
+    const minutes = +currentTime[0] * 60;
+    const seconds = +currentTime[1];
+    return minutes + seconds;
+  }
+  return 0;
 }
 
 // Document load activity handler
 async function handleWindowLoader(operation) {
-  if (!localStorage.getItem("currentTime")) {
-    document.querySelector("#timer").textContent = "0:0";
+  if (!localStorageTime) {
+    setDOMValues(timer, { textContent: "00:00" });
 
-    localStorage.setItem(
-      "currentTime",
-      document.querySelector("#timer").textContent
-    );
+    setLocalStorageValues("currentTime", timer.textContent);
+
     createPuzzleBoard();
-  } else if (operation.command == "Reset") {
-    document.querySelector("#timer").textContent = "0:0";
-    localStorage.setItem(
-      "currentTime",
-      document.querySelector("#timer").textContent
-    );
-    document.querySelector("#movesCounter").textContent = "0";
-    localStorage.setItem(
-      "currentMoves",
-      document.querySelector("#movesCounter").textContent
-    );
-    createPuzzleBoard();
-    handleTimer({ command: "Stop" });
-  } else {
-    stepsCounter = Number(localStorage.getItem("currentMoves"));
-    createPuzzleBoard();
+    return;
   }
+  if (operation.command == "RESET") {
+    setDOMValues(timer, { textContent: "00:00" });
+    setLocalStorageValues("currentTime", timer.textContent);
+    setDOMValues(movesCounter, { textContent: "0" });
+
+    setLocalStorageValues("currentMoves", movesCounter.textContent);
+    createPuzzleBoard();
+    handleTimerOperations({ command: "STOP" });
+    return;
+  }
+  stepsCounter = +localStorageMoves;
+  createPuzzleBoard();
 }
 
 // Function to create the Puzzle board
 async function createPuzzleBoard() {
-  document.querySelector("#boardCover").style.display = "flex";
-  let resultingArray = [];
-  let list = createPuzzleBoardHelper(resultingArray);
-  if (!localStorage.getItem("currentPositions")) {
-    localStorage.setItem("currentPositions", list);
+  gameBoardCover.style.display = "flex";
+  const arrayHelper = [];
+  const arrayOfBoardValues = createPuzzleBoardHelper(arrayHelper);
+  if (!localStoragePositions) {
+    setLocalStorageValues("currentPositions", arrayOfBoardValues);
   }
-  if (!localStorage.getItem("currentMoves")) {
-    localStorage.setItem("currentMoves", stepsCounter);
+  if (!localStorageMoves) {
+    setLocalStorageValues("currentMoves", stepsCounter);
   }
 
-  document.querySelector("#movesCounter").textContent =
-    localStorage.getItem("currentMoves");
-  document.querySelector("#timer").textContent =
-    localStorage.getItem("currentTime");
+  setDOMValues(movesCounter, {
+    textContent: localStorageMoves,
+  });
+  setDOMValues(timer, {
+    textContent: localStorageTime,
+  });
+  setDOMValues(toggleActivity, {
+    value: "Start",
+    title: "Start Game",
+    innerHTML: `<img src="./assets/startIcon.svg" alt="Start Game Button" >`,
+  });
+  setDOMValues(gameBoardCover, {
+    textContent: "Play",
+  });
 
-  stepsCounter = Number(localStorage.getItem("currentMoves"));
-
-  document.querySelector("#toggleActivity").value = "Start";
-  document.querySelector("#toggleActivity").title = "Start Game"
-  document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-skip-start-circle" viewBox="0 0 16 16">
-    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-    <path d="M10.229 5.055a.5.5 0 0 0-.52.038L7 7.028V5.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0V8.972l2.71 1.935a.5.5 0 0 0 .79-.407v-5a.5.5 0 0 0-.271-.445z" />
-  </svg>`
-  document.querySelector("#boardCover").textContent = "Play";
-
-  await checkForValidity(list)
+  await checkForValidityOfPuzzle(arrayOfBoardValues)
     .then((result) => {
-      let swapperPosition;
+      stepsCounter = +localStorageMoves;
 
-      for (let i = 0; i < list.length; i++) {
-        if (i + 1 == list[i]) {
-          status_map.set(i + 1, { status: true });
-          document.querySelector(`#board_row_${i + 1}`).textContent = list[i];
-        } else if (list[i] == null) {
-          swapperPosition = i + 1;
+      let positionOfEmptyBlock;
 
-          status_map.set(i + 1, { status: false });
-          document.querySelector(`#board_row_${i + 1}`).textContent = " ";
+      for (let value = 0; value < arrayOfBoardValues.length; value++) {
+        const cellId = GiveCellId(value + 1);
+        if (value + 1 == arrayOfBoardValues[value]) {
+          positionStatusMap.set(value + 1, { status: true });
+
+          setDOMValues(cellId, { textContent: arrayOfBoardValues[value] });
+          setDOMValues(cellId, { value: arrayOfBoardValues[value] });
+        } else if (arrayOfBoardValues[value] == null) {
+          positionOfEmptyBlock = value + 1;
+          if (value + 1 == 16) {
+            positionStatusMap.set(value + 1, { status: true });
+          } else {
+            positionStatusMap.set(value + 1, { status: false });
+          }
+
+          setDOMValues(cellId, { textContent: " " });
+          setDOMValues(cellId, { value: null });
         } else {
-          status_map.set(i + 1, { status: false });
-          document.querySelector(`#board_row_${i + 1}`).textContent = list[i];
+          positionStatusMap.set(value + 1, { status: false });
+          setDOMValues(cellId, { textContent: arrayOfBoardValues[value] });
+          setDOMValues(cellId, { value: arrayOfBoardValues[value] });
         }
       }
-      change_background(status_map, swapperPosition);
+      changeBackgroundOfCell(positionStatusMap, positionOfEmptyBlock);
     })
     .catch((err) => {
       createPuzzleBoard();
     });
 }
 
-
 // Change Background Colour of the blocks according to their state
-function change_background(status_map, swapperPosition) {
-  let map_values = status_map.entries();
-  let array = Array.from(map_values);
+function changeBackgroundOfCell(positionStatusMap, positionOfEmptyBlock) {
+  const mapValues = positionStatusMap.entries();
+  const arrayOfMapValues = Array.from(mapValues);
 
-  for (let i = 0; i < array.length; i++) {
-    if (array[i][1].status) {
-      document.querySelector(
-        `#board_row_${array[i][0]}`
-      ).style.backgroundColor = "green";
-    } else if (array[i][0] == swapperPosition) {
-      document.querySelector(
-        `#board_row_${array[i][0]}`
-      ).style.backgroundColor = "rgb(78, 78, 9)";
-     
+  for (const value of arrayOfMapValues) {
+    const cellId = GiveCellId(value[0]);
+    if (value[1].status) {
+      // if empty block is at its correct position
+      if (positionOfEmptyBlock == 16) {
+        GiveCellId(positionOfEmptyBlock).style.backgroundColor =
+          "rgb(78, 78, 9)";  
+        if (value[0] == 15 || value[0] == 12) {
+          cellId.style.backgroundColor = "green";
+        }
+      } else {
+        cellId.style.backgroundColor = "green";
+      }
     } else {
-      document.querySelector(
-        `#board_row_${array[i][0]}`
-      ).style.backgroundColor = "yellow";
+      if (value[0] == positionOfEmptyBlock) {
+        cellId.style.backgroundColor = "rgb(78, 78, 9)";
+      } else {
+        cellId.style.backgroundColor = "yellow";
+      }
     }
   }
 }
 
 // Function to get the inversion count
-function getInversionCount(array) {
+function getInversionCount(arrayOfBoardValues) {
   let inversionCount = 0;
-  for (let i = 0; i < array.length; i++) {
-    for (let j = i + 1; j < array.length; j++) {
-      if (array[i] != null && array[j] != null && array[i] > array[j]) {
+  for (let value = 0; value < arrayOfBoardValues.length; value++) {
+    for (
+      let nextvalue = value + 1;
+      nextvalue < arrayOfBoardValues.length;
+      nextvalue++
+    ) {
+      if (
+        arrayOfBoardValues[value] != null &&
+        arrayOfBoardValues[nextvalue] != null &&
+        arrayOfBoardValues[value] > arrayOfBoardValues[nextvalue]
+      ) {
         inversionCount++;
       }
     }
@@ -159,287 +228,326 @@ function getInversionCount(array) {
 }
 
 // helper function to create the puzzle board
-function createPuzzleBoardHelper(resultingArray) {
-  let currentTime = getCurrentTime();
+function createPuzzleBoardHelper(arrayHelper) {
+  const currentTime = getCurrentTime();
 
   if (currentTime > 0) {
-    let array = localStorage.getItem("currentPositions").split(",");
-    let index = array.indexOf("");
-    array[index] = null;
-    return array;
-  } else {
-    let helper = selector.slice(0, 17); // copy content of selector in helper
-
-    while (helper.length) {
-      let random_num = Math.floor(Math.random() * 17);
-      if (helper[random_num] === undefined) {
-        continue;
-      } else {
-        resultingArray.push(helper[random_num]);
-      }
-
-      helper.splice(random_num, 1);
-    }
-    localStorage.setItem("currentPositions", resultingArray);
-    return resultingArray;
+    const arrayFromLocalStorage = localStoragePositions.split(",");
+    const index = arrayFromLocalStorage.indexOf("");
+    arrayFromLocalStorage[index] = null;
+    return arrayFromLocalStorage;
   }
+  const helper = positionsArray.slice(0, 17); // copy content of positionsArray in helper
+
+  while (helper.length) {
+    const randomNum = Math.floor(Math.random() * 17);
+    if (helper[randomNum] === undefined) {
+      continue;
+    } else {
+      arrayHelper.push(helper[randomNum]);
+    }
+
+    helper.splice(randomNum, 1);
+  }
+  setLocalStorageValues("currentPositions", arrayHelper);
+
+  return arrayHelper;
 }
 
 // Check for solvable or unsolvable case
-async function checkForValidity(array) {
-  let inversionCount = getInversionCount(array);
+async function checkForValidityOfPuzzle(arrayOfBoardValues) {
+  const inversionCount = getInversionCount(arrayOfBoardValues);
 
-  let positionOfSwapper = Math.ceil((array.indexOf(null) + 1) / 4) * 4;
+  const positionOfEmptyBlock =
+    Math.ceil((arrayOfBoardValues.indexOf(null) + 1) / 4) * 4;
 
-  if ((positionOfSwapper / 4) % 2 != 0 && inversionCount % 2 != 0) {
+  if ((positionOfEmptyBlock / 4) % 2 != 0 && inversionCount % 2 != 0) {
     return new Promise((resolve, reject) => {
       resolve(true);
-    });
-  } else if ((positionOfSwapper / 4) % 2 == 0 && inversionCount % 2 == 0) {
-    return new Promise((resolve, reject) => {
-      resolve(true);
-    });
-  } else {
-    return new Promise((resolve, reject) => {
-      reject("Unsolvable");
     });
   }
+  return (positionOfEmptyBlock / 4) % 2 == 0 && inversionCount % 2 == 0
+    ? new Promise((resolve, reject) => {
+        resolve(true);
+      })
+    : new Promise((resolve, reject) => {
+        reject("Unsolvable");
+      });
 }
 
-// Handle Time
-let timeHanddlerHelper;
+// Handle Timeer Events
 
-//  function to support Timer Function
-function supportHandleTimer(exactTime) {
-  if (exactTime < 60) {
-    document.querySelector("#timer").textContent = `0:${exactTime}`;
-    localStorage.setItem(
-      "currentTime",
-      document.querySelector("#timer").textContent
-    );
-  } else {
-    let minutes = Math.floor(exactTime / 60);
-    let seconds = exactTime - 60 * minutes;
-    document.querySelector("#timer").textContent = `${minutes}:${seconds}`;
-    localStorage.setItem(
-      "currentTime",
-      document.querySelector("#timer").textContent
-    );
+let timeInterval;
+
+//  function to set value of the Timer
+function setTimerValue(currentTime) {
+  if (currentTime < 60) {
+    setDOMValues(timer, {
+      textContent:
+        currentTime <= 9 ? `00:0${currentTime}` : `00:${currentTime}`,
+    });
+
+    setLocalStorageValues("currentTime", timer.textContent);
+    return;
   }
+  const minutes = Math.floor(currentTime / 60);
+  const seconds = currentTime - 60 * minutes;
+  if (minutes <= 9 && seconds <= 9) {
+    setDOMValues(timer, {
+      textContent: `0${minutes}:0${seconds}`,
+    });
+  } else if (minutes <= 9 && seconds > 9) {
+    setDOMValues(timer, {
+      textContent: `0${minutes}:${seconds}`,
+    });
+  } else if (minutes > 9 && seconds <= 9) {
+    setDOMValues(timer, {
+      textContent: `${minutes}:0${seconds}`,
+    });
+  } else {
+    setDOMValues(timer, {
+      textContent: `${minutes}:${seconds}`,
+    });
+  }
+
+  setLocalStorageValues("currentTime", timer.textContent);
 }
 
 //  function to handle the timer for different scenarios
-function handleTimer(operation) {
-  if (operation.command == "Start" && !localStorage.getItem("currentTime")) {
-    let currentTime = new Date().getMinutes() * 60 + new Date().getSeconds();
-    timeHanddlerHelper = setInterval(() => {
-      let newDate = new Date();
+function handleTimerOperations(operation) {
+  if (operation.command == "START" && !localStorageTime) {
+    const time = new Date().getMinutes() * 60 + new Date().getSeconds();
+    timeInterval = setInterval(() => {
+      const newDate = new Date();
 
-      let newTime = newDate.getMinutes() * 60 + newDate.getSeconds();
+      const newTime = newDate.getMinutes() * 60 + newDate.getSeconds();
 
-      let exactTime = newTime - currentTime;
-      supportHandleTimer(exactTime);
+      const currentTime = newTime - time;
+      setTimerValue(currentTime);
     }, 1000);
-  } else if (operation.command == "Stop") {
-    clearInterval(timeHanddlerHelper);
-    document.querySelector("#timer").textContent = "0:0";
-    localStorage.setItem(
-      "currentTime",
-      document.querySelector("#timer").textContent
-    );
-  } else if (operation.command == "Pause") {
-    clearInterval(timeHanddlerHelper);
-  } else {
-    let currentTime = getCurrentTime();
-    supportHandleTimer(currentTime);
-    currentTime++;
-
-    timeHanddlerHelper = setInterval(() => {
-      supportHandleTimer(currentTime);
-      currentTime++;
-    }, 1000);
+    return;
   }
+  if (operation.command == "STOP") {
+    clearInterval(timeInterval);
+    setDOMValues(timer, { textContent: "00:00" });
+
+    setLocalStorageValues("currentTime", timer.textContent);
+    return;
+  }
+  if (operation.command == "PAUSE") {
+    clearInterval(timeInterval);
+    return;
+  }
+
+  let currentTime = getCurrentTime();
+  setTimerValue(currentTime);
+  currentTime++;
+
+  timeInterval = setInterval(() => {
+    setTimerValue(currentTime);
+    currentTime++;
+  }, 1000);
 }
 
-// Function to search for the position of swapper
-function searchForSwapper(position) {
-  if (document.querySelector(`#board_row_${position}`).textContent == " ") {
-    increaseStepCounter();
+// Function to search for the position of empty block
+function isEmptyBlock(position) {
+  if (GiveCellId(position).value == "null") {
+    stepsCounter++;
     return true;
   }
 }
 
 // Function to swap the blocks
-function Swapper(positionOfSwapper, myPosition) {
-  let value = document.querySelector(`#board_row_${myPosition}`).textContent;
-  document.querySelector(`#board_row_${myPosition}`).textContent = " ";
+function SwapWithEmptyBlock(positionOfEmptyBlock, positionOfClickedBlock) {
+  const clickedBlockCellId = GiveCellId(positionOfClickedBlock);
+  const emptyBlockCellId = GiveCellId(positionOfEmptyBlock);
+  const { value } = clickedBlockCellId;
+  clickButtonAudio.play();
+  setDOMValues(clickedBlockCellId, { textContent: " " });
+  setDOMValues(clickedBlockCellId, { value: null });
 
-  document.querySelector(`#board_row_${positionOfSwapper}`).textContent = value;
-
-  if (positionOfSwapper == value) {
-    status_map.set(positionOfSwapper, { status: true });
-    change_background(status_map, myPosition);
+  setDOMValues(emptyBlockCellId, { textContent: value });
+  setDOMValues(emptyBlockCellId, { value });
+  if (positionOfClickedBlock == 16) {
+    positionStatusMap.set(positionOfClickedBlock, {
+      status: true,
+    });
   } else {
-    status_map.set(myPosition, { status: false });
-    change_background(status_map, myPosition);
+    positionStatusMap.set(positionOfClickedBlock, {
+      status: false,
+    });
+  }
+
+  if (positionOfEmptyBlock == value) {
+    positionStatusMap.set(positionOfEmptyBlock, { status: true });
+  } else {
+    positionStatusMap.set(positionOfEmptyBlock, { status: false });
+  }
+
+  changeBackgroundOfCell(positionStatusMap, positionOfClickedBlock);
+}
+
+// Function to check the position of the empty block around the clicked block
+function checkForEmptyBlock(positionOfClickedBlock) {
+  let leftBlockPosition = positionOfClickedBlock - 1; // search the position of the empty block on left of the clicked block
+  let rightBlockPosition = positionOfClickedBlock + 1; // search the position of the empty block on right of the clicked block
+  const topBlockPosition = positionOfClickedBlock - 4; // search the position of the empty block on top of the clicked block
+  const bottomBlockPosition = positionOfClickedBlock + 4; // search the position of the empty block on bottom of the clicked block
+
+  if (positionOfClickedBlock % 4 == 0) {
+    rightBlockPosition = -1;
+  }
+  if ((positionOfClickedBlock - 1) % 4 == 0) {
+    leftBlockPosition = -1;
+  }
+
+  if (leftBlockPosition > 0 && isEmptyBlock(leftBlockPosition)) {
+    SwapWithEmptyBlock(leftBlockPosition, positionOfClickedBlock);
+    return;
+  }
+  if (
+    rightBlockPosition < 17 &&
+    rightBlockPosition > 0 &&
+    isEmptyBlock(rightBlockPosition)
+  ) {
+    SwapWithEmptyBlock(rightBlockPosition, positionOfClickedBlock);
+
+    return;
+  }
+  if (topBlockPosition > 0 && isEmptyBlock(topBlockPosition)) {
+    SwapWithEmptyBlock(topBlockPosition, positionOfClickedBlock);
+    return;
+  }
+  if (bottomBlockPosition < 17 && isEmptyBlock(bottomBlockPosition)) {
+    SwapWithEmptyBlock(bottomBlockPosition, positionOfClickedBlock);
+    return;
   }
 }
 
-// Function to check the position of the swapper around the clicked block
-function checkForSwapper(myLeft, myRight, myTop, myBottom, myPosition) {
-  if (myPosition % 4 == 0) {
-    myRight = -1;
-  }
-  if ((myPosition - 1) % 4 == 0) {
-    myLeft = -1;
-  }
-
-  if (myLeft > 0) {
-    if (searchForSwapper(myLeft)) {
-      Swapper(myLeft, myPosition);
-      return;
-    }
-  }
-  if (myRight < 17 && myRight > 0) {
-    if (searchForSwapper(myRight)) {
-      Swapper(myRight, myPosition);
-
-      return;
-    }
-  }
-  if (myTop > 0) {
-    if (searchForSwapper(myTop)) {
-      Swapper(myTop, myPosition);
-      return;
-    }
-  }
-  if (myBottom < 17) {
-    if (searchForSwapper(myBottom)) {
-      Swapper(myBottom, myPosition);
-      return;
-    }
-  }
-}
-
-// Function to create an array of the current positions of the blocks
-async function createArray() {
-  let array = [];
+// Function to create an array of the current positions of the blocks from Local Storage
+async function createArrayForLocalStoragePositions() {
+  const array = [];
   for (let i = 0; i < 16; i++) {
-    if (document.querySelector(`#board_row_${i + 1}`).textContent == " ") {
+    const cellId = GiveCellId(i + 1);
+    if (cellId.textContent == " ") {
       array.push(null);
     } else {
-      array.push(
-        Number(document.querySelector(`#board_row_${i + 1}`).textContent)
-      );
+      array.push(+cellId.textContent);
     }
   }
   return array;
 }
 
 // Function to handle the event when a blockm is clicked
-async function clickedBlock(id) {
-  if (document.querySelector(`#board_row_${id}`).textContent == " ") {
+async function clickBlock(id) {
+  if (GiveCellId(id).textContent == " ") {
     return;
   }
-  id = Number(id);
-  let myPosition = id;
-  let myLeft = id - 1; // search the position of the swapper on left of the clicked block
-  let myRight = id + 1; // search the position of the swapper on right of the clicked block
-  let myTop = id - 4; // search the position of the swapper on top of the clicked block
-  let myBottom = id + 4; // search the position of the swapper on bottom of the clicked block
 
-  checkForSwapper(myLeft, myRight, myTop, myBottom, myPosition);
-  document.querySelector("#movesCounter").textContent = stepsCounter;
-  localStorage.setItem(
-    "currentMoves",
-    document.querySelector("#movesCounter").textContent
-  );
-  let currentPositionArray = await createArray();
-  localStorage.setItem("currentPositions", currentPositionArray); // update the currentPositions in localStorage
+  const positionOfClickedBlock = id;
 
-  // Fetch all the Blocks and their position status and fill them in an array
-  let result = Array.from(status_map.values());
-  for (let i = 0; i < result.length; i++) {
-    result[i] = result[i].status;
-  }
-
-  const counts = {}; // array filled with status of all the blocks
-  result.forEach((x) => {
-    counts[x] = (counts[x] || 0) + 1;
+  checkForEmptyBlock(positionOfClickedBlock);
+  setDOMValues(movesCounter, {
+    textContent: stepsCounter,
   });
 
-  // if there is only one false count in the array that means the game is over
-  if (counts.false == 1) {
-    let timeConsumed = document.querySelector("#timer").textContent.split(":");
-    let minutes = Number(timeConsumed[0]);
-    let seconds = Number(timeConsumed[1]);
-    let timeResultToBeShown;
-    if (!minutes) {
-      timeResultToBeShown = `${seconds} Seconds`;
-    } else if (!seconds) {
-      timeResultToBeShown = `${minutes} Minutes`;
-    } else {
-      timeResultToBeShown = `${minutes} Minute and ${seconds} Seconds`;
-    }
+  setLocalStorageValues("currentMoves", movesCounter.textContent);
+
+  const currentPositionArray = await createArrayForLocalStoragePositions();
+  setLocalStorageValues("currentPositions", currentPositionArray);
+
+  // Fetch status of all positions from the map and fill it in an array
+  const positionStatusArray = Array.from(positionStatusMap.values());
+
+  // check for positions with status false
+  const falseStatus = positionStatusArray.find((item) => item.status == false);
+  // if falseStatus is undefined this means all the blocks are at correct positions and game is over
+  if (falseStatus == undefined) {
+    const timeConsumed = timer.textContent.split(":");
+    const minutes = +timeConsumed[0];
+    const seconds = +timeConsumed[1];
+    const timeResultToBeShown = !minutes
+      ? `${seconds} Seconds`
+      : !seconds
+      ? `${minutes} Minutes`
+      : `${minutes} Minute and ${seconds} Seconds`;
+    winningAudio.play();
     setTimeout(() => {
       alert(
-        `Congratulations you solved the puzzle in ${stepsCounter
-        } steps in ${timeResultToBeShown}`
+        `Congratulations you solved the puzzle in ${stepsCounter} steps in ${timeResultToBeShown}`
       );
-      handleWindowLoader({ command: "Reset" });
-    }, 500)
-
+      handleWindowLoader({ command: "RESET" });
+    }, 500);
   }
 }
 
 // Handle boardCover click event
-document.querySelector("#boardCover").addEventListener("click", function () {
-  document.querySelector("#boardCover").style.display = "none";
-  document.querySelector("#toggleActivity").value = "Pause";
-  document.querySelector("#toggleActivity").title = "Pause Game"
-  document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
-</svg>`
 
-  handleTimer({ command: "Start" });
+gameBoardCover.addEventListener("click", function () {
+  gameBoardCover.style.display = "none";
+
+  setDOMValues(toggleActivity, {
+    value: "Pause",
+    title: "Pause Game",
+    innerHTML: `<img src="./assets/pauseIcon.svg" alt="Pause Game Button">`,
+  });
+  toggleActivityAudio.play();
+  handleTimerOperations({ command: "START" });
 });
 
+// Function to set DOM  elemnt attributes
+function setDOMValues(element, attr) {
+  const arrayOfEntries = Object.entries(attr);
+
+  for (const arrayOfEntry of arrayOfEntries) {
+    element[arrayOfEntry[0]] = arrayOfEntry[1];
+  }
+}
+
 // Handle resume and pause activities
-document
-  .querySelector("#toggleActivity")
-  .addEventListener("click", function () {
-    if (document.querySelector("#toggleActivity").value == "Start") {
-      document.querySelector("#toggleActivity").value = "Pause";
-      document.querySelector("#toggleActivity").title = "Pause Game"
-      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
-</svg>`
-      document.querySelector("#boardCover").style.display = "none";
 
-      handleTimer({ command: "Start" });
-    } else if (
-      document.querySelector("#toggleActivity").value == "Pause"
-    ) {
-      document.querySelector("#boardCover").style.display = "flex";
-      handleTimer({ command: "Pause" });
-      document.querySelector("#boardCover").textContent = "Paused";
-      document.querySelector("#toggleActivity").value = "Resume";
-      document.querySelector("#toggleActivity").title = "Resume Game"
-      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-play-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/>
-</svg>`
+toggleActivity.addEventListener("click", function () {
+  if (toggleActivity.value == "Start") {
+    setDOMValues(toggleActivity, {
+      value: "Pause",
+      title: "Pause Game",
+      innerHTML: `<img src="./assets/pauseIcon.svg" alt="Pause Game Button">`,
+    });
+    toggleActivityAudio.play();
+    gameBoardCover.style.display = "none";
 
-    } else {
-      document.querySelector("#toggleActivity").value = "Pause";
-      document.querySelector("#toggleActivity").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z"/>
-</svg>`
-      document.querySelector("#toggleActivity").title = "Pause Game"
-      document.querySelector("#boardCover").style.display = "none";
-      handleTimer({ command: "Resume" });
-    }
+    handleTimerOperations({ command: "Start" });
+    return;
+  }
+  if (toggleActivity.value == "Pause") {
+    gameBoardCover.style.display = "flex";
+    handleTimerOperations({ command: "PAUSE" });
+    setDOMValues(gameBoardCover, {
+      textContent: "Paused",
+    });
+    setDOMValues(toggleActivity, {
+      value: "Resume",
+      title: "Resume Game",
+      innerHTML: `<img src="./assets/resumeIcon.svg" alt="Resume Game Button">`,
+    });
+    toggleActivityAudio.play();
+    return;
+  }
+  setDOMValues(toggleActivity, {
+    value: "Pause",
+    title: "Pause Game",
+    innerHTML: `<img src="./assets/pauseIcon.svg" alt="Pause Game Button">`,
   });
+  toggleActivityAudio.play();
+  gameBoardCover.style.display = "none";
+  handleTimerOperations({ command: "RESUME" });
+});
+
+resetButton.addEventListener("click", () => {
+  toggleActivityAudio.play();
+  handleWindowLoader({ command: "RESET" });
+});
+
+document.querySelector("#setter").addEventListener("click", () => {
+  GiveCellId(1).value = "17";
+});

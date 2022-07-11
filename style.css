@@ -1,28 +1,202 @@
 * {
-    font-family: monospace;
+  font-family: monospace;
 }
 
 #Game {
-    position: relative;
-
+  position: relative;
 }
 
-#Game_header {
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-size: 30pt;
-    font-weight: bold;
+#Game_header p {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 30pt;
+  font-weight: bold;
 }
 
 #Game_activity {
+  display: flex;
+  flex-wrap: wrap;
+  height: 200px;
+  max-width: 450px;
+
+  align-items: center;
+  justify-content: center;
+  border: 3px solid black;
+  border-radius: 25px;
+  margin: 20px;
+
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+
+#Game_activity_moves {
+  box-sizing: border-box;
+  height: 70px;
+  max-width: 200px;
+  text-align: center;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 18pt;
+  background-color: rgb(122, 203, 223);
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+#Game_activity_timer {
+  box-sizing: border-box;
+  height: 70px;
+  max-width: 200px;
+  text-align: center;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 18pt;
+  padding: 15px;
+  border-radius: 25px;
+  font-weight: bold;
+  background-color: rgb(122, 203, 223);
+}
+
+#Game_activity_togglebuttons {
+  box-sizing: border-box;
+  display: flex;
+  height: 80px;
+  max-width: 200px;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+#toggleactivity {
+  box-sizing: border-box;
+  height: 50px;
+  max-width: 100px;
+  text-align: center;
+  margin: 10px;
+  font-size: 16pt;
+  border: 3px solid black;
+  border-radius: 25px;
+  cursor: pointer;
+  padding: 10px;
+  background-color: black;
+  color: white;
+}
+
+#resetbutton {
+  box-sizing: border-box;
+  height: 50px;
+  max-width: 100px;
+  text-align: center;
+  margin: 10px;
+  font-size: 16pt;
+  border: 3px solid black;
+  border-radius: 25px;
+  cursor: pointer;
+  padding: 10px;
+  background-color: black;
+  color: white;
+}
+
+#Game_activity_togglebuttons {
+  flex: 50%;
+}
+
+#Game_gameboard {
+  flex: 100%;
+  height: 650px;
+  max-width: 390px;
+  margin: auto;
+}
+
+#Game_gameboard_container {
+  position: relative;
+}
+
+#Game_gameboard_container_cover {
+  height: 400px;
+  max-width: 390px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+
+  background-color: rgb(11, 56, 11);
+  opacity: 80%;
+  color: white;
+  font-size: 500%;
+
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 2px solid black;
+  border-radius: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+#Game_gameboard_container_board {
+  height: 380px;
+  max-width: 400px;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  border: 3px solid black;
+  border-radius: 25px;
+}
+
+.Game_gameboard_container_board_row {
+  display: flex;
+}
+
+.Game_gameboard_container_board_row button {
+  display: flex;
+  padding: 5px;
+  border: 2px solid black;
+  height: 84px;
+  width: 84px;
+  margin: 5px;
+  align-items: center;
+  justify-content: center;
+  font-size: 25pt;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+#Game_footer {
+  height: 200px;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  position: absolute;
+  bottom: 0px;
+
+  text-align: left;
+  font-size: 20pt;
+  word-spacing: -5px;
+}
+
+@media screen and (min-width: 508px) {
+  #Game_activity {
     display: flex;
     flex-wrap: wrap;
-    height: 200px;
-    max-width: 450px;
+    height: 150px;
+    max-width: 500px;
 
     align-items: center;
     justify-content: center;
@@ -34,104 +208,91 @@
     margin-right: auto;
     left: 0;
     right: 0;
-    padding: 10px;
-}
+  }
 
-#Game_activity_moves {
+  #Game_activity_moves {
     box-sizing: border-box;
     height: 70px;
     max-width: 200px;
     text-align: center;
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 10px;
     font-size: 18pt;
     background-color: rgb(122, 203, 223);
     font-weight: bold;
     padding: 10px;
     border-radius: 25px;
+  }
 
-
-}
-
-#Game_activity_timer {
+  #Game_activity_timer {
     box-sizing: border-box;
     height: 70px;
     max-width: 200px;
     text-align: center;
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 10px;
     font-size: 18pt;
-    padding: 15px;
+    padding-top: 10px;
+    padding-left: 15px;
     border-radius: 25px;
     font-weight: bold;
     background-color: rgb(122, 203, 223);
+  }
 
-}
-
-#Game_activity_ToggleButtons {
+  #Game_activity_togglebuttons {
     box-sizing: border-box;
     display: flex;
     height: 80px;
-    max-width: 200px;
+    max-width: 350px;
     margin: auto;
     align-items: center;
     justify-content: center;
+  }
 
-
-}
-
-#toggleActivity {
-    box-sizing: border-box;
+  #toggleactivity {
     height: 50px;
     max-width: 100px;
     text-align: center;
     margin: 10px;
-    font-size: 16pt;
+    font-size: 14pt;
     border: 3px solid black;
     border-radius: 25px;
     cursor: pointer;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     background-color: black;
-    color: white
-}
+    color: white;
+  }
 
-#resetButton {
-    box-sizing: border-box;
+  #resetbutton {
     height: 50px;
     max-width: 100px;
-    text-align: center;
+    text-align: left;
     margin: 10px;
-    font-size: 16pt;
+    font-size: 14pt;
     border: 3px solid black;
     border-radius: 25px;
     cursor: pointer;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     background-color: black;
-    color: white
-}
+    color: white;
+  }
 
-#Game_activity_ToggleButtons {
-    flex: 50%;
-}
-
-#Game_gameBoard {
+  #Game_gameboard {
     flex: 100%;
-    height: 650px;
-    max-width: 390px;
+    height: 720px;
+    max-width: 500px;
     margin: auto;
+  }
 
-}
+  #Game_gameboard_container {
+    position: relative;
+  }
 
-#boardTable {
-
-
-
-    position: relative
-}
-
-#boardCover {
-    height: 400px;
-    max-width: 390px;
+  #Game_gameboard_container_cover {
+    height: 480px;
+    max-width: 500px;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -150,11 +311,11 @@
     margin-right: auto;
     left: 0;
     right: 0;
-}
+  }
 
-#board {
-    height: 380px;
-    max-width: 400px;
+  #Game_gameboard_container_board {
+    height: 460px;
+    max-width: 500px;
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -165,231 +326,33 @@
     right: 0;
     border: 3px solid black;
     border-radius: 25px;
+  }
 
-
-}
-
-.board_row {
+  .Game_gameboard_container_board_row {
     display: flex;
-}
+  }
 
-.board_row div {
+  .Game_gameboard_container_board_row button {
     display: flex;
     padding: 5px;
     border: 2px solid black;
-    height: 72px;
-    width: 72px;
-    margin: 5px;
+    height: 84px;
+    width: 84px;
+    margin: 15px;
     align-items: center;
     justify-content: center;
     font-size: 25pt;
     font-weight: bold;
     cursor: pointer;
     border-radius: 25px;
-}
+  }
 
-#Game_footer {
+  #Game_footer {
     height: 200px;
-    max-width: 450px;
+    max-width: 520px;
     margin-left: auto;
     margin-right: auto;
-    left: 0;
-    right: 0;
-    position: absolute;
-    bottom: 0px;
-
-    text-align: left;
     font-size: 20pt;
     word-spacing: -5px;
-}
-
-
-
-
-@media screen and (min-width:508px) {
-    #Game_activity {
-        display: flex;
-        flex-wrap: wrap;
-        height: 150px;
-        max-width: 480px;
-
-        align-items: center;
-        justify-content: center;
-        border: 3px solid black;
-        border-radius: 25px;
-        margin: 20px;
-
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-
-    }
-
-    #Game_activity_moves {
-        box-sizing: border-box;
-        height: 70px;
-        max-width: 200px;
-        text-align: center;
-        margin-left: 20px;
-        margin-right: 10px;
-        font-size: 18pt;
-        background-color: rgb(122, 203, 223);
-        font-weight: bold;
-        padding: 10px;
-        border-radius: 25px;
-
-
-    }
-
-    #Game_activity_timer {
-        box-sizing: border-box;
-        height: 70px;
-        max-width: 200px;
-        text-align: center;
-        margin-left: 20px;
-        margin-right: 10px;
-        font-size: 18pt;
-        padding-top: 10px;
-        padding-left: 15px;
-        border-radius: 25px;
-        font-weight: bold;
-        background-color: rgb(122, 203, 223);
-
-    }
-
-    #Game_activity_ToggleButtons {
-        box-sizing: border-box;
-        display: flex;
-        height: 80px;
-        max-width: 300px;
-        margin: auto;
-        align-items: center;
-        justify-content: center;
-
-
-    }
-
-    #toggleActivity {
-
-        height: 50px;
-        max-width: 100px;
-        text-align: center;
-        margin: 10px;
-        font-size: 14pt;
-        border: 3px solid black;
-        border-radius: 25px;
-        cursor: pointer;
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: black;
-        color: white
-    }
-
-    #resetButton {
-
-        height: 50px;
-        max-width: 100px;
-        text-align: left;
-        margin: 10px;
-        font-size: 14pt;
-        border: 3px solid black;
-        border-radius: 25px;
-        cursor: pointer;
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: black;
-        color: white
-    }
-
-    #Game_gameBoard {
-        flex: 100%;
-        height: 720px;
-        max-width: 500px;
-        margin: auto;
-
-
-    }
-
-    #boardTable {
-
-
-
-        position: relative
-    }
-
-    #boardCover {
-        height: 480px;
-        max-width: 500px;
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-
-
-        background-color: rgb(11, 56, 11);
-        opacity: 80%;
-        color: white;
-        font-size: 500%;
-
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        border: 2px solid black;
-        border-radius: 25px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-    }
-
-    #board {
-        height: 460px;
-        max-width: 500px;
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        padding: 10px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        border: 3px solid black;
-        border-radius: 25px;
-
-
-    }
-
-    .board_row {
-        display: flex;
-    }
-
-    .board_row div {
-        display: flex;
-        padding: 5px;
-        border: 2px solid black;
-        height: 72px;
-        width: 72px;
-        margin: 15px;
-        align-items: center;
-        justify-content: center;
-        font-size: 25pt;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 25px;
-    }
-
-    #Game_footer {
-        height: 200px;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        position: absolute;
-        bottom: 0px;
-
-        text-align: left;
-        font-size: 20pt;
-        word-spacing: -5px;
-    }
+  }
 }

@@ -10,75 +10,96 @@
 
 <link rel="stylesheet" href="./style.css">
 
-<body>
+<body style="display: none;">
 
     <section id="Game">
-        <section id="Game_header">FIFTEEN PUZZLE GAME</section>
+        <section id="Game_header">
+            <div id="Game_header_container">
+                <p>FIFTEEN PUZZLE GAME</p>
+            </div>
+
+        </section>
         <section id="Game_activity">
             <div id="Game_activity_moves">
                 <div>Moves</div>
-                <div id="movesCounter"></div>
+                <div id="movescounter"></div>
             </div>
             <div id="Game_activity_timer">
                 <div>Time</div>
                 <div id="timer"></div>
             </div>
-            <div id="Game_activity_ToggleButtons">
-                <button id="toggleActivity" value="Start"></button>
-                <button id="resetButton" onclick="handleWindowLoader({command:'Reset'})" title="Reset Game"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                        class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
-                        <path
-                            d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
-                    </svg></button>
+            <div id="Game_activity_togglebuttons">
+                <button id="toggleactivity" value="Start"></button>
+                <button id="resetbutton" title="Reset Game">
+                    <img src="./assets/resetIcon.svg" alt="Reset Game Button">
+                </button>
             </div>
         </section>
-        
-        <section id="Game_gameBoard">
-            <div id="boardTable">
-                <div id="board">
-                    <div class="board_row">
-                        <div id="board_row_1" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_2" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_3" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_4" onclick="clickedBlock(this.id.split('_')[2])"></div>
+
+        <section id="Game_gameboard">
+            <div id="Game_gameboard_container">
+                <div id="Game_gameboard_container_board">
+                    <div class="Game_gameboard_container_board_row">
+                        <button id="Game_gameboard_container_board_row_cell-1"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-2"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-3"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-4"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
                     </div>
-                    <div class="board_row">
-                        <div id="board_row_5" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_6" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_7" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_8" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div class="Game_gameboard_container_board_row">
+                        <button id="Game_gameboard_container_board_row_cell-5"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-6"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-7"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-8"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
 
                     </div>
-                    <div class="board_row">
-                        <div id="board_row_9" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_10" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_11" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_12" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div class="Game_gameboard_container_board_row">
+                        <button id="Game_gameboard_container_board_row_cell-9"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-10"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-11"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-12"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
                     </div>
-                    <div class="board_row">
-                        <div id="board_row_13" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_14" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_15" onclick="clickedBlock(this.id.split('_')[2])"></div>
-                        <div id="board_row_16" onclick="clickedBlock(this.id.split('_')[2])"></div>
+                    <div class="Game_gameboard_container_board_row">
+                        <button id="Game_gameboard_container_board_row_cell-13"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-14"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-15"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
+                        <button id="Game_gameboard_container_board_row_cell-16"
+                            onclick="clickBlock(+(this.id.split('-')[1]))"></button>
                     </div>
 
                 </div>
-                <div id="boardCover">PLAY</div>
+                <div id="Game_gameboard_container_cover">PLAY</div>
             </div>
         </section>
 
-        <section id="Game_footer"><b>Instructions</b> : Place each block in it's correct position starting from
-            <b>1 to 15</b> . To move a block you can <b>click</b> on it and swap it with the empty block .
+        <section id="Game_footer">
+            <div id="Game_footer_instructionscontainer">
+                <b>Instructions</b> : Place each block in it's correct position starting from <b>1 to 15</b>.To move a
+                block you can <b>click</b> on it and swap it with the empty block.
+            </div>
+
         </section>
-        
+
     </section>
 
 
 
 
-
+<button id="setter">Set</button>
 
 
     <script src="./script.js"></script>
