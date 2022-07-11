@@ -547,7 +547,3 @@ resetButton.addEventListener("click", () => {
   toggleActivityAudio.play();
   handleWindowLoader({ command: "RESET" });
 });
-
-document.querySelector("#setter").addEventListener("click", () => {
-  GiveCellId(1).value = "17";
-});
